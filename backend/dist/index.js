@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var router_1 = require("./router");
-var PORT = 3000;
+var PORT = 8080;
 var app = express_1.default();
 var router = new router_1.Router();
 router.initialize();
