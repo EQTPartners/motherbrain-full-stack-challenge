@@ -1,28 +1,31 @@
-import { CssBaseline } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
+import { CssBaseline } from '@material-ui/core';
 
 import { Map, MenuBar } from './components';
+import { getConfig } from './conifg';
 import { InvestmentsResponse, InvestorsResponse, MapTypes } from './types';
 
-const fetchInvestors = async (): Promise<InvestorsResponse> => {
-  const response = await fetch('http://localhost:8080/investors');
-  return response.json();
-};
-
-const fetchInvestments = async (name: string): Promise<InvestmentsResponse> => {
-  const response = await fetch(`http://localhost:8080/investors/${name}/investments`);
-  return response.json();
-};
-
-function App() {
+export const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<InvestmentsResponse | InvestorsResponse | null>(null);
-  const [title, setTitle] = useState('Investors');
+  const [title, setTitle] = useState('Loading...');
   const [type, setType] = useState(MapTypes.Investors);
   const [isBackArrowVisible, setIsBackArrowVisible] = useState(false);
 
+  const config = getConfig();
+
+  const fetchInvestors = async (): Promise<InvestorsResponse> => {
+    const response = await fetch(`${config.api.url}/investors`);
+    return response.json();
+  };
+
+  const fetchInvestments = async (name: string): Promise<InvestmentsResponse> => {
+    const response = await fetch(`${config.api.url}/investors/${name}/investments`);
+    return response.json();
+  };
+
   useEffect(() => {
-    const data = fetchInvestors()
+    fetchInvestors()
       .then(data => {
         setData(data);
         setTitle(`Investors - ${data?.investors?.length}`);
@@ -77,6 +80,4 @@ function App() {
       <Map type={type} data={data} handleInvestorClick={handleInvestorClick} />
     </>
   );
-}
-
-export default App;
+};

@@ -111,21 +111,6 @@ export class ElasticsearchClient {
     return result.body.aggregations.investor_names.buckets;
   }
 
-  public async getFundingRound(id: string): Promise<FundingRoundES> {
-    const params: RequestParams.Get = {
-      index: Indices.Funding,
-      id,
-    };
-
-    const result = await this.client.get(params);
-
-    if (result?.body?.hits?.hits?.[0] == null) {
-      throw new Error(`get results empty for funding round: ${id}`);
-    }
-
-    return result.body.hits.hits[0];
-  }
-
   public async searchFundingRounds(
     searchParams: FundingRoundSearchParams,
   ): Promise<FundingRoundES[]> {

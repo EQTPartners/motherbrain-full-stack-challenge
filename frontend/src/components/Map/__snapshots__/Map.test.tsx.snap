@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Map should render 1`] = `
+<div
+  id="deckgl-wrapper"
+  style="position: absolute; z-index: 0; left: 0px; top: 0px; width: 100%; height: 100%;"
+>
+  <canvas
+    id="deckgl-overlay"
+    style="left: 0px; top: 0px; width: 100%; position: absolute; height: 100%;"
+  />
+</div>
+`;

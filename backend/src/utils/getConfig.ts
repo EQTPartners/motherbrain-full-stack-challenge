@@ -1,4 +1,3 @@
-import { logger } from './logger';
 import { Config } from '../types';
 
 export const getConfig = (): Config => {

@@ -1,7 +1,12 @@
 import React from 'react';
+import { render } from '@testing-library/react';
+
+import { App } from './App';
 
 describe('App', () => {
-  it('should work', () => {
-    expect(1 + 1).toEqual(2);
+  // Rendering the Deck.GL components isn't working because GL only exists in the browser.
+  it.skip('should render', () => {
+    const { container } = render(<App />);
+    expect(container.firstChild).toMatchSnapshot();
   });
 });

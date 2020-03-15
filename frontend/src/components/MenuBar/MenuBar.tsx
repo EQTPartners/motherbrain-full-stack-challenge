@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     position: 'absolute',
   },
-  menuButton: {
+  backIconButton: {
     marginRight: theme.spacing(2),
   },
   title: {
@@ -31,15 +31,15 @@ export const MenuBar: React.FC<MenuBarProps> = (props: MenuBarProps) => {
         {props.isBackArrowVisible ? (
           <IconButton
             edge="start"
-            className={classes.menuButton}
+            className={classes.backIconButton}
             color="inherit"
-            aria-label="menu"
+            aria-label="back-icon"
             onClick={() => props.handleBackButtonClick()}
           >
             <ArrowBack />
           </IconButton>
         ) : null}
-        <Typography variant="h6" className={classes.title}>
+        <Typography variant="h6" className={classes.title} aria-label="title">
           {props.title}
         </Typography>
       </Toolbar>

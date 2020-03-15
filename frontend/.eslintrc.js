@@ -14,4 +14,14 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'prettier/prettier': ['error'],
   },
+  overrides: [
+    {
+      files: [
+        "**/*.test.js"
+      ],
+      env: {
+        jest: true
+      }
+    }
+  ]
 };
