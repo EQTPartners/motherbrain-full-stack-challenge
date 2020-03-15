@@ -37,6 +37,7 @@ services:
       - /frontend/node_modules
     ports:
       - 3000:3000
+      - 35729:35729
     command: ["yarn", "start"]
 
 networks:

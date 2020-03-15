@@ -14,4 +14,4 @@ RUN yarn lint
 RUN yarn test
 RUN yarn build
 
-CMD ["yarn", "start"]
+CMD ["yarn", "serve"]

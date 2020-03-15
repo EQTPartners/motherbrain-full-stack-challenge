@@ -40,7 +40,7 @@ Stretch:
   * Investor Location (City and Country of Investor in Orgs Results)
 
 ## Challenges
-* Splitting Investor Names: `"investor_names": "{\"Entrepreneurs Fund\",\"Heidelberg Innovation\"}"`
+* Investor Names formatting: `"investor_names": "{\"Entrepreneurs Fund\",\"Heidelberg Innovation\"}"`
 * Joining between investor names and orgs (i.e. Sequoia Capital invested in Athelas, I'd like to learn where Sequoia Capital is based from data in the org table) is weak because searching must be performed on the name of the investor.
   * Having an investor org uuid would be helpful for performance and accuracy
 * Geocoding cities and countries can be ambiguous (i.e. Google would return the same results for both Burlington, MA, USA vs. Burlington, VT, USA, because the state isn't part of the dataset)
@@ -51,5 +51,5 @@ Stretch:
 * I added Redis to cache the results since the performance of querying Elasticsearch and/or Google Maps API resulted in a lot of round trips for data that won't be updated that frequently
 
 ## To-Do
-* logging
-* cleanup
+* display funding information in tooltip
+* api documentation

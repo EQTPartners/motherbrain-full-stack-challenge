@@ -1,4 +1,4 @@
-export enum MapTypes {
+export enum LayerTypes {
   Investors,
   Investments,
 }

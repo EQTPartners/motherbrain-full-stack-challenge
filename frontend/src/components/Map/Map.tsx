@@ -9,19 +9,20 @@ import { DEFAULT_GREAT_CIRCLE_LAYER_OPTIONS } from './DEFAULT_GREAT_CIRCLE_LAYER
 import { DEFAULT_SCATTERPLOT_LAYER_OPTIONS } from './DEFAULT_SCATTERPLOT_LAYER_OPTIONS';
 import { INITIAL_VIEW_STATE } from './INITIAL_VIEW_STATE';
 import { getConfig } from '../../conifg';
-import { InvestmentsResponse, InvestorsResponse, Line, MapTypes, Point } from '../../types';
+import { InvestmentsResponse, InvestorsResponse, Line, LayerTypes, Point } from '../../types';
 import { MapDataFormatter } from '../../utils';
 
 interface MapProps {
-  data: InvestorsResponse | InvestmentsResponse | null;
+  investmentsData: InvestmentsResponse | null;
+  investorsData: InvestorsResponse | null;
   handleInvestorClick: (name: string) => void;
-  type: MapTypes;
+  layerType: LayerTypes;
 }
 
 const isLine = (object: any): object is Line => object.to != null;
 
 export const Map = (props: MapProps) => {
-  const { data, handleInvestorClick, type } = props;
+  const { investmentsData, investorsData, handleInvestorClick, layerType } = props;
   const {
     mapbox: { apiToken },
   } = getConfig();
@@ -32,21 +33,22 @@ export const Map = (props: MapProps) => {
   }>({ object: null, x: 0, y: 0 });
 
   const getLayer = () => {
-    if (data == null) {
-      return;
+    switch (layerType) {
+      case LayerTypes.Investments:
+        return getInvestmentsLayer();
+      case LayerTypes.Investors:
+        return getInvestorsLayer();
+      default:
+        return;
     }
-
-    if (type === MapTypes.Investors) {
-      return getInvestorsLayer();
-    }
-
-    return getInvestmentsLayer();
   };
 
   const getInvestorsLayer = () => {
-    const formattedData = MapDataFormatter.convertInvestorsResponseToPointData(
-      data as InvestorsResponse,
-    );
+    if (investorsData == null) {
+      return;
+    }
+
+    const formattedData = MapDataFormatter.convertInvestorsResponseToPointData(investorsData);
 
     return new ScatterplotLayer({
       ...DEFAULT_SCATTERPLOT_LAYER_OPTIONS,
@@ -59,9 +61,11 @@ export const Map = (props: MapProps) => {
   };
 
   const getInvestmentsLayer = () => {
-    const formattedData = MapDataFormatter.convertInvestmentsResponseToLineData(
-      data as InvestmentsResponse,
-    );
+    if (investmentsData == null) {
+      return null;
+    }
+
+    const formattedData = MapDataFormatter.convertInvestmentsResponseToLineData(investmentsData);
 
     return new GreatCircleLayer({
       ...DEFAULT_GREAT_CIRCLE_LAYER_OPTIONS,

@@ -1,16 +1,27 @@
-import React, { useEffect, useState } from 'react';
 import { CssBaseline } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 
 import { Map, MenuBar } from './components';
 import { getConfig } from './conifg';
-import { InvestmentsResponse, InvestorsResponse, MapTypes } from './types';
+import { InvestmentsResponse, InvestorsResponse, LayerTypes } from './types';
+
+const LOADING_TITLE = 'Loading...';
+const ERROR_TITLE = 'Oops, something went wrong...';
+
+interface AppState {
+  layerType: LayerTypes;
+  investmentsData: InvestmentsResponse | null;
+  investorsData: InvestorsResponse | null;
+  title: string;
+}
 
 export const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<InvestmentsResponse | InvestorsResponse | null>(null);
-  const [title, setTitle] = useState('Loading...');
-  const [type, setType] = useState(MapTypes.Investors);
-  const [isBackArrowVisible, setIsBackArrowVisible] = useState(false);
+  const [state, setState] = useState<AppState>({
+    layerType: LayerTypes.Investors,
+    investmentsData: null,
+    investorsData: null,
+    title: 'Loading...',
+  });
 
   const config = getConfig();
 
@@ -25,59 +36,85 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchInvestors()
+    fetch(`${getConfig().api.url}/investors`)
+      .then(response => response.json())
       .then(data => {
-        setData(data);
-        setTitle(`Investors - ${data?.investors?.length}`);
+        setState(s => ({
+          ...s,
+          investorsData: data,
+          title: `Investors - ${data?.investors?.length}`,
+        }));
       })
-      .catch(err => console.error(err))
-      .finally(() => setIsLoading(false));
+      .catch(err => {
+        console.error(err);
+        setState(s => ({
+          ...s,
+          title: ERROR_TITLE,
+        }));
+      });
   }, []);
 
   const handleInvestorClick = async (name: string) => {
-    setIsLoading(true);
-    setTitle('Loading...');
-    setData(null);
-    setType(MapTypes.Investments);
+    setState(s => ({
+      ...s,
+      layerType: LayerTypes.Investments,
+      investmentsData: null,
+      title: LOADING_TITLE,
+    }));
     try {
       const data = (await fetchInvestments(name)) as InvestmentsResponse;
-      setIsBackArrowVisible(true);
-      setTitle(`${name} - ${data.investments.length} investments`);
-      setData(data);
+      setState(s => ({
+        ...s,
+        investmentsData: data,
+        title: `${name} - ${data.investments.length} investments`,
+      }));
     } catch (err) {
       console.error(err);
-      setIsBackArrowVisible(true);
-      setTitle('Error :( try something else!');
+      setState(s => ({
+        ...s,
+        layerType: LayerTypes.Investors,
+        investmentsData: null,
+        title: ERROR_TITLE,
+      }));
     }
-    setIsLoading(false);
   };
 
   const handleBackButtonClick = async () => {
-    setIsLoading(true);
-    setTitle('Loading...');
-    setData(null);
-    setIsBackArrowVisible(false);
-    setType(MapTypes.Investors);
+    setState(s => ({
+      ...s,
+      layerType: LayerTypes.Investors,
+      title: LOADING_TITLE,
+    }));
     try {
       const data = await fetchInvestors();
-      setData(data);
-      setTitle(`Investors - ${data?.investors?.length}`);
+      setState(s => ({
+        ...s,
+        investorsData: data,
+        title: `Investors - ${data?.investors?.length}`,
+      }));
     } catch (err) {
       console.error(err);
-      setTitle('Error :( try something else!');
+      setState(s => ({
+        ...s,
+        title: ERROR_TITLE,
+      }));
     }
-    setIsLoading(false);
   };
 
   return (
     <>
       <CssBaseline />
       <MenuBar
-        title={title}
-        isBackArrowVisible={isBackArrowVisible}
+        title={state.title}
+        isBackArrowVisible={state.layerType === LayerTypes.Investments}
         handleBackButtonClick={handleBackButtonClick}
       />
-      <Map type={type} data={data} handleInvestorClick={handleInvestorClick} />
+      <Map
+        layerType={state.layerType}
+        investmentsData={state.investmentsData}
+        investorsData={state.investorsData}
+        handleInvestorClick={handleInvestorClick}
+      />
     </>
   );
 };
