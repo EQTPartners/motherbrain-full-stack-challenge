@@ -1,15 +1,32 @@
 version: '3.3'
 services:
+  redis:
+    image: redis:5-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    networks:
+      - redis-net
+    volumes:
+      - redis-data:/data
+
   backend:
     image: motherbrain-full-stack-challenge/backend:latest
     build: backend
     volumes:
       - ./backend:/backend
       - /backend/node_modules
+    links:
+      - redis
     ports:
       - 8080:8080
     environment:
-      ES_URL: ${ES_URL}
+      - ES_URL=${ES_URL}
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+      - REDIS_URL=redis
+    networks:
+      - redis-net
+    depends_on:
+      - redis
     command: ["yarn", "dev"]
 
   frontend:
@@ -21,3 +38,9 @@ services:
     ports:
       - 3000:3000
     command: ["yarn", "start"]
+
+networks:
+  redis-net:
+
+volumes:
+  redis-data:
