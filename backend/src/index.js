@@ -1,7 +1,19 @@
-require("dotenv").config();
+const { resolve } = require("path");
+
+require("dotenv").config({
+  path: resolve("..", ".env"),
+});
+
 const http = require("http");
 const { URL } = require("url");
 const { Client } = require("@elastic/elasticsearch");
+
+if (!process.env.ES_URL) {
+  console.error(
+    "Make sure to update the .env file at the root of the repo with the correct ES_URL before starting the server."
+  );
+  process.exit(1);
+}
 
 const client = new Client({
   node: process.env.ES_URL,

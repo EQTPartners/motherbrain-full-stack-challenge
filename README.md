@@ -1,13 +1,8 @@
 # Motherbrain Full Stack Challenge
 
-Hello! :wave:
+1. Fork this repo.
+2. Ensure [docker](https://www.docker.com/) is installed.
+3. Add a `.env` file at the root of the repo with the content `ES_URL=placeholder`. Replace "placeholder" with the url you've received from your contact at EQT.
+4. Start the project by running `docker compose up` in the root folder and open http://localhost:3000 in your browser for _further instructions_.
 
-Please fork this repo.
-
-To begin the challenge, you have to have need a copy of the secret `.env` file, saved to `/backend/` folder of this project.
-
-Next, run `yarn dev` in `/backend/` and `yarn start` in `/frontend/` project and go to
-[localhost:3000](http://localhost:3000) when everything is built and ready.
-There you'll find more information.
-
-Good Luck!
+**Alternatively:** Install node locally and run `yarn dev` in the `backend` and `frontend` folders respectively.

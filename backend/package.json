@@ -8,6 +8,6 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "yarn && nodemon src/index.js"
   }
 }
