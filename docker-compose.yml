@@ -16,16 +16,11 @@ services:
   frontend:
     container_name: "frontend"
     image: node:18-slim
-    ports:
-      - 3000:3000
     volumes:
       - ./frontend:/frontend
     working_dir: /frontend
+    ports:
+      - 3000:3000
     environment:
       FORCE_COLOR: 3
-    links:
-      - backend
-    depends_on:
-      backend:
-        condition: service_started
     command: yarn dev
