@@ -22,17 +22,19 @@ export default function OrgTable() {
   }
 
   return (
-    <table>
+    <table cellSpacing={8}>
       <thead>
         <tr>
-          <th>Name</th>
+          <th align="left">Name</th>
+          <th align="left">Description</th>
         </tr>
       </thead>
 
       <tbody>
         {orgs.map((org) => (
           <tr key={org.uuid}>
-            <td>{org.company_name}</td>
+            <td style={{ verticalAlign: "top" }}>{org.company_name}</td>
+            <td style={{ verticalAlign: "top" }}>{org.short_description}</td>
           </tr>
         ))}
       </tbody>
