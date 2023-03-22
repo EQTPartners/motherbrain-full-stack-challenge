@@ -1,7 +1,7 @@
 const { resolve } = require("path");
 
 require("dotenv").config({
-  path: resolve("..", ".env"),
+  path: resolve(__dirname, "../..", ".env"),
 });
 
 const http = require("http");
@@ -19,7 +19,9 @@ const client = new Client({
   node: process.env.ES_URL,
 });
 
-http.createServer(handle).listen(8080);
+http
+  .createServer(handle)
+  .listen(8080, () => console.log("Server started at http://localhost:8080"));
 
 async function handle(req, res) {
   try {
